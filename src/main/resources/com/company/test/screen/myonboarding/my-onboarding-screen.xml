@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
         caption="msg://myOnboardingScreen.caption">
-    <layout>
+    <layout expand="spacer" spacing="true">
+        <vbox >
+            <label id="totalStepsLabel"/>
+            <label id="completedStepsLabel"/>
+            <label id="overdueStepsLabel"/>
+
+        </vbox>
+        <label id="spacer"/>
         <table id="userStepsTable" height="400px" width="100%"
                dataContainer="userStepsDc">
             <columns>
+                <column id="complited" caption=""/>
+                <column id="step.name"/>
                 <column id="dueDate"/>
                 <column id="completedDate"/>
                 <column id="sortValue"/>
+
+
             </columns>
         </table>
+        <hbox spacing="true">
+            <button id="saveButton" caption="Save" primary="true"/>
+            <button id="discardButton" caption="Discard"/>
+        </hbox>
+
+
     </layout>
     <data>
         <collection id="userStepsDc"
                     class="com.company.test.entity.UserStep">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="step" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="userStepsDl">
                 <query>
                     <![CDATA[select e from UserStep e

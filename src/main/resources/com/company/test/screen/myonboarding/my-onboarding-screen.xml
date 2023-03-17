@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://myOnboardingScreen.caption">
+    <layout>
+        <table id="userStepsTable" height="400px" width="100%"
+               dataContainer="userStepsDc">
+            <columns>
+                <column id="dueDate"/>
+                <column id="completedDate"/>
+                <column id="sortValue"/>
+            </columns>
+        </table>
+    </layout>
+    <data>
+        <collection id="userStepsDc"
+                    class="com.company.test.entity.UserStep">
+            <fetchPlan extends="_base"/>
+            <loader id="userStepsDl">
+                <query>
+                    <![CDATA[select e from UserStep e
+                    where e.user = :user
+                    order by e.sortValue desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+</window>

@@ -4,28 +4,44 @@ import io.jmix.core.HasTimeZone;
 import io.jmix.core.annotation.Secret;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.SystemLevel;
+import io.jmix.core.metamodel.annotation.Composition;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import io.jmix.security.authentication.JmixUserDetails;
 import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
 @Entity
 @Table(name = "USER_", indexes = {
-        @Index(name = "IDX_USER__ON_USERNAME", columnList = "USERNAME", unique = true)
+        @Index(name = "IDX_USER__ON_USERNAME", columnList = "USERNAME", unique = true),
+        @Index(name = "IDX_USER__DEPARTMENT", columnList = "DEPARTMENT_ID")
 })
 public class User implements JmixUserDetails, HasTimeZone {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", nullable = false)
     @JmixGeneratedValue
     private UUID id;
+
+    @OrderBy("sortValue")
+    @Composition
+    @OneToMany(mappedBy = "user")
+    private List<UserStep> steps;
+
+    @Column(name = "JOINING_DATE")
+    private LocalDate joiningDate;
+
+    @Column(name = "ONBOARDING_STATUS")
+    private Integer onboardingStatus;
 
     @Version
     @Column(name = "VERSION", nullable = false)
@@ -55,8 +71,44 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "TIME_ZONE_ID")
     protected String timeZoneId;
 
+    @JoinColumn(name = "DEPARTMENT_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Departament department;
+
     @Transient
     protected Collection<? extends GrantedAuthority> authorities;
+
+    public LocalDate getJoiningDate() {
+        return joiningDate;
+    }
+
+    public void setJoiningDate(LocalDate joiningDate) {
+        this.joiningDate = joiningDate;
+    }
+
+    public List<UserStep> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<UserStep> steps) {
+        this.steps = steps;
+    }
+
+    public Departament getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Departament department) {
+        this.department = department;
+    }
+
+    public OnboardingStatus getOnboardingStatus() {
+        return onboardingStatus == null ? null : OnboardingStatus.fromId(onboardingStatus);
+    }
+
+    public void setOnboardingStatus(OnboardingStatus onboardingStatus) {
+        this.onboardingStatus = onboardingStatus == null ? null : onboardingStatus.getId();
+    }
 
     public UUID getId() {
         return id;

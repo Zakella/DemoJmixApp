@@ -3,12 +3,15 @@
   <component name="JmixDataStoreSettingsManager">
     <moduleSettings>
       <entry key="com.company.test.main">
+        <ModuleSettings />
+      </entry>
+      <entry key="test.main">
         <ModuleSettings>
-          <option name="dataStoreOptionsV2">
+          <option name="dataStoreOptions">
             <map>
               <entry key="main">
                 <value>
-                  <DataStoreSettingsV2 />
+                  <DataStoreSettings />
                 </value>
               </entry>
             </map>
